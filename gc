@@ -1,0 +1,1 @@
+gcc $* sio.c str.c -lm

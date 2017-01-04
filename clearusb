@@ -1,0 +1,11 @@
+su
+fdisk -l
+cat <<EOF | fdisk /dev/sdb
+d
+n
+p
+w
+EOF
+fdisk -l
+mkfs -t ntfs /dev/sdb1
+

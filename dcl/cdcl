@@ -1,0 +1,3 @@
+rm dcl undcl 2>/dev/null
+gcc main.c gettoken.c dcl.c ../str.c ../sio.c -lm -o dcl
+ln dcl undcl

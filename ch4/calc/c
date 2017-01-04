@@ -1,0 +1,1 @@
+gcc main.c getop.c function.c stack.c getch.c -lm

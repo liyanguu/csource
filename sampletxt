@@ -1,0 +1,14 @@
+Exercise 1-8. Write a program to count blanks, tabs, and newlines.
+
+Exercise 1-9. Write a program to copy its input to its output, replacing
+each string of one or more blanks by a single blank.
+
+Exercise 1-13. Write a program to print a histogram of the lengths of words
+in its input. It is easy to draw the histogram with the bars horizontal; a 
+vertical orientation is more challenging.
+
+Exercise 1-14. Write a program to print a histogram of the frequencies of 
+different characters in its input.
+
+Exercise 1-15. Rewrite the temperature conversion program of Section 1.2 to
+use a function for conversion.

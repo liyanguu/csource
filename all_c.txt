@@ -1,0 +1,2783 @@
+/**********************************************************
+/ TITLE: binary_search.c
+/
+/ CHANGE LOG:
+/ 	2015-4-16	COPIED FROM THE C PROGRAMMING LANGUAGE
+**********************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/* header for binsearch() */
+int monosearch(int k, int v[], int lim);
+int binsearch(int k, int v[], int lim);
+int getstring(char s[], const int lim);
+/* --------------------- */
+
+#define MAX 1000000
+#define LEN 100
+
+main() {
+	int i, x, list[MAX], p;
+	char s[LEN];	
+
+
+	for (i = 0; i < MAX; ++i)
+		list[i] = i - MAX / 2;	/* initialize */
+
+	while (getstring(s, LEN) > 0) {
+		x = atoi(s);
+
+		/* start timming */ 
+		p = binsearch(x, list, MAX);			
+	 	/* stop */
+		printf("%-10s %d\n", "binary search", p);
+
+		p = monosearch(x, list, MAX);
+		printf("%-10s %d\n", "mono search", p);
+	}
+}
+
+
+
+/* function definitions */
+
+int getstring(char s[], const int lim) {
+	int i;
+	char c;
+
+	for (i = 0; i < lim - 1 && (c = getchar()) != '\t' && c != ' ' && c != '\n' && c != EOF; ++i)
+		s[i] = c;
+	s[i] = '\0';
+
+	if (c == EOF)
+		return -1;
+
+	return i;
+}
+
+int monosearch(int k, int v[], int limt) {
+	int i;
+
+	for (i = 0; i < limt; ++i)
+		if (k == v[i]) return i; /* match */
+
+	return -1; /* mismatch */
+}
+
+int binsearch(int x, int v[], int lim) {
+	int low, high, mid;
+
+	low = 0;
+	high = lim - 1;
+		
+	while (low <= high) {
+		mid = (low + high)/2;
+		if (x < v[mid])
+			high = mid - 1;
+		else if (x > v[mid])
+			low = mid + 1;
+		else
+			return mid;
+	}
+	
+	return -1;	/* mismatch */
+}	
+	
+/*
+filename: c2f.c - convert celsius to fahrenheit degrees
+log: 
+	2015-10-15 *
+	2016-01-12 change name from cels_fahr.c to simpler c2f.c.
+	  rewrite using symbolic constants, and using a macro
+	  to do the conversion. 
+*/
+
+#include <stdio.h>
+
+#define LOW -20
+#define HIGH 100
+#define STEP 7 
+
+#define cels2fahr(t) ((9.0 / 5.0) * (t) + 32.0)
+
+main() {
+	int cels;
+
+	printf("%10s %10s\n", "celsius", "fahrenheit");
+	for (cels = LOW; cels <= HIGH; cels += STEP)
+		printf("%10d %10.1f\n", cels, cels2fahr(cels));
+}
+/* 2014-4-24
+	copied form P65 trim()
+	Exercise 3-4
+*/
+
+
+/* c control flow
+
+logic control:
+
+if (expression)
+	statements
+
+
+if (expression)
+	statements
+else
+	statements
+
+
+if (expression)
+	statements
+else if(expression)
+	statements
+else if(expression)
+	statements
+else
+	statements
+
+
+switch (expr) {
+	case const-expr:
+		statements
+	case const-expr:
+		statements
+	...
+	default:
+		statements
+}
+
+loops:
+
+while (expression)
+	statements
+
+for (expr1; expr2; expr3)
+	statements
+
+do {
+	statements
+} while (expr);
+
+*/
+
+
+
+
+#include <string.h>
+#include <stdio.h>
+#define LEN 100
+
+int trim (char s[]) {
+	int n;
+	
+	for (n = strlen(s) - 1; n >= 0; --n)
+		if (s[n] != ' ' && s[n] != '\n' && s[n] != '\t')
+			break;
+	
+	s[++n] = '\0';
+	return 0;
+}
+
+/* absolute value for 32-bit integer */
+/* use long to test int */
+#define MIN64 -4294967296
+#define MAX64 4294967295
+int abs(long int n) {
+	if (n > MAX64 || n < MIN64) {
+		printf("overflow !\n");
+		return 0;
+	}
+	return int(-n);
+}	
+	
+main() {
+	long int n;
+
+	n = -4294967296;
+	n = abs(n);
+	printf("absolute value: %d", n);
+
+
+	int i, c;
+	char s[LEN];
+
+	for (i = 0; i < LEN-1 && (c = getchar()) != EOF; ++i)
+		s[i] = c;
+
+	s[i] = '\0';
+
+	trim(s);
+	printf("%s\n", s);
+
+	return 0;
+}
+
+
+		
+/* filename: convert.c - print celsius-fahrenheit table 
+   2015-10-15 create 
+   2016-3-3   change style of table head */
+
+#include <stdio.h>
+
+#define LOW 0
+#define HIGH 200
+#define STEP 11 
+
+main() {
+	int cels;
+
+	printf("celsius  fahrenheit\n");
+	printf("-------------------\n");
+	cels = HIGH;
+	while (cels >= LOW) {
+		printf("%7d %7.1f\n", cels, 9.0 / 5.0 * cels + 32.0);
+		cels -= STEP;
+	}
+}
+/*
+file name: day.c - calculate days in a year
+change log:
+	2015-12-2 create
+	12-4 change total[12] --> total[13]
+*/
+
+#include <stdio.h>
+
+int leap(int y);
+
+main() {
+	int year, mon, day, total[13];
+	
+	scanf("%d-%d-%d", &year, &mon, &day);
+	total[0] = leap(year) ? 366 : 365;
+	total[1] = 31;
+	total[2] = leap(year) ? 29 : 28;
+	total[3] = 31;
+	total[4] = 30;
+	total[5] = 31;
+	total[6] = 30;
+	total[7] = 31;
+	total[8] = 31;
+	total[9] = 30;
+	total[10] = 31;
+	total[11] = 30;
+	total[12] = 31;
+	if (mon < 1 || mon > 12)
+		return;
+	if (day < 1 || day > total[mon])
+		return;
+	while (--mon >= 1)
+		day += total[mon];
+	printf("%d\n", day);
+}
+
+int leap(int y) {
+	if ((y % 4 == 0 && y % 400 != 0) || y % 400 == 0)
+		return 1;
+	else
+		return 0;
+}
+/* days.c - calculate days between two dates */
+/* 2015-4-30 */
+
+#include <stdio.h>
+#include <ctype.h>
+
+
+#define NLEAPY 365
+#define LEAPY 366
+
+int isLeap (int y) {
+	if (y % 4 != 0 || y % 400)
+		return 0;
+	else
+		return 1;
+}
+
+#define MONTH 12
+int daysInY( int y, int m, int d) {
+	/* dm - days before each month in non leap year */
+	int dm[MONTH];
+	dm [0] = 0;
+	dm [1] = 31;
+	dm [2] = 59;
+	dm [3] = 90;
+	dm [4] = 120;
+	dm [5] = 151;
+	dm [6] = 181;
+	dm [7] = 212;
+	dm [8] = 243;
+	dm [9] = 273;
+	dm [10] = 304;
+	dm [11] = 334; 
+	
+	if (isLeap(y) && m > 2) 
+		return dm[m-1] + d + 1;
+	else
+		return dm[m-1] + d;
+}
+
+/* y2-m2-d2 after y1-m1-d1 */
+int days(int y2, int m2, int d2,
+	int y1, int m1, int d1) {
+
+	int i, duration;
+
+	duration = 0;
+	for (i = y2; i > y1; --i) {
+		if (isLeap(i))
+			duration += LEAPY;
+		else
+			duration += NLEAPY;
+	}
+	return duration - daysInY(y1, m1, d1)
+			+ daysInY(y2, m2, d2);	
+}
+
+enum MONTHS { JAN = 1, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC };
+void obtainDate(int *y, int *m, int *d, char *str) {
+	/* obtain year */
+	for ( ; *str != '-'; ++str) {
+		if (!isdigit(*str)) {
+			printf("year is not a number, using 1999 instead!\n");
+			*y = 1999;
+			break;
+		}
+		*y = *y * 10 + *str - '0';
+	}
+
+	/* obtain month */
+	for (++str; *str != '-'; ++str) {
+		if (!isdigit(*str)) {
+			printf("month is not a number, using 1 instead!\n");
+			*m = 1;
+			break;
+		}
+		*m = *m * 10 + *str - '0';
+	}
+
+	/* obtain day */
+	for (++str; *str != '\0'; ++str) { 
+		if (!isdigit(*str)) {
+			printf("day is not a number, using 1 instead!\n");
+			*d = 1;
+			return;
+		}
+		*d = *d * 10 + *str - '0';
+	}
+
+	/* check month and day */
+	switch (*m) {
+	case FEB:
+		if (isLeap(*y)) {
+			if (*d < 0 || *d > 29) {
+				printf("wrong day(1-29), using 1 instead!\n");
+				*d = 1;
+			}
+		}
+		else {
+			if (*d < 0 || *d > 28) {
+				printf("wrong day(1-28), using 1 instead!\n");
+				*d = 1;
+			}
+		}
+		break;
+	case JAN: case MAR: case MAY: case JUL: case AUG: case OCT: case DEC:
+		if (*d < 0 || *d > 31) {
+			printf("wrong day(1-31), using 1 instead!\n");
+			*d = 1;
+		}
+		break;
+	case APR: case JUN: case SEP: case NOV:
+		if (*d < 0 || *d > 30) {
+			printf("wrong day(1-30), using 1 instead!\n");
+			*d = 1;
+		}
+		break;
+	default:
+		printf("wrong month(1-12): %d, using 1 instead!\n", *m);
+		*m = *d = 1;
+	}
+}	
+
+int days2(char * date2, char * date1) {
+	int y2, m2, d2, y1, m1, d1;
+	y2 = m2 = d2 = y1 = m1 = d1 = 0; 
+
+	obtainDate(&y2, &m2, &d2, date2);
+	obtainDate(&y1, &m1, &d1, date1);
+
+	return days(y2, m2, d2, y1, m1, d1);
+}
+
+/* test */
+main(int argc, char* argv[]) {
+	if (argc != 3) {
+		printf("you should type: days date2 date1\n");
+		return 0;
+	}
+	
+	int d;
+
+	d = days2(argv[1], argv[2]);
+	printf("%d\n", d);
+	return 0;
+}
+/*
+file name: esc.c - convert to escape sequence 
+change log: 
+	2015-12-3 create
+*/
+
+#include <stdio.h>
+
+main() {
+	char c;
+	
+	while ((c = getchar()) != EOF) {
+		while (c != ' ' && c != '\t' && c != '\n') {
+			if (c == EOF)
+				return;
+			else
+				putchar(c);
+			c = getchar();
+		}
+		putchar('\\');
+		if (c == ' ')
+			putchar('b');
+		if (c == '\t')
+			putchar('t');
+		if (c == '\n')
+			putchar('n');
+	}
+}
+/*
+file name: escseq.c
+*/
+
+#include <stdio.h>
+#include "/home/liyang/include/text.h"
+
+main() {
+	char c;
+
+	while ((c = getcha()) != EOF)
+		switch (c) {
+		case '\t':
+			putchar('\\');
+			putchar('t');
+			break;
+		case '\b':
+			putchar('\\');
+			putchar('b');
+			break;
+		case '\\':
+			putchar('\\');
+			putchar('\\');
+			break;
+		default:
+			putchar(c);
+			break;
+		} 
+}
+/* FILENAME: gcd.c - greatest common divisor */
+/* DATE: 2015-9-17 */
+
+#include <stdio.h>
+#include "strings.c"
+
+/*
+int getnum(void);
+void printnum(int);
+*/
+int gcd(int n1, int n2);
+
+#define LEN 10
+
+main() {
+	int n1, n2;
+	char s[LEN];
+
+	printf("input one number: ");
+	getstring(s, LEN);
+	n1 = str2num(s);
+
+	printf("input another number: ");			
+	getstring(s, LEN);
+
+	n2 = gcd(n1, str2num(s));
+	num2str(n2, s, LEN);
+	printf("the greatest common divisor of them is: %s\n", s);
+}
+
+int getnum(void) {
+	int c, n;
+	n = 0;
+	while ((c = getchar()) != '\n')
+		n = n * 10 + c - '0';
+	return n;
+}	
+
+#define BUFSIZE 100
+void printnum(int n) {
+	char buf[BUFSIZE];
+	char *bufp = buf;
+	for (*bufp = '\0'; n; n /= 10) 
+		*++bufp = n % 10 + '0';
+	for (; *bufp; --bufp)
+		putchar(*bufp);
+	return;
+}
+	
+int gcd(int n1, int n2) {
+	int r;
+
+	if (n1 * n2 <= 0)
+		return 0;
+
+	while ((r = n1 % n2) != 0) {
+		n1 = n2;
+		n2 = r;
+	}
+
+	return n2;
+}
+/* file name: getdate.c - get time/date from a time server
+   log:
+	2016-2-28 copy from UNIX network programming, pp4. */
+
+#include "unp.h"
+
+#define bzero2(ptr, n) memset(ptr, 0, n)
+#define MAXLINE	100
+#define SA   struct sockaddr
+
+int main (int argc, char **argv) {
+	int sockfd, n;
+	char recvline[MAXLINE+1];
+	struct sockaddr_in servaddr;
+
+	if (argc != 2) {
+		printf("usage: %s <ip address>\n", argv[0]);
+		return -1;
+	}
+	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		printf("socket error\n");
+		return -1;
+	}
+	bzero2(&servaddr, sizeof(servaddr));
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_port = htons(13); /* daytime server */
+	if (inet_pton(AF_INET, argv[1], &servaddr.sin_addr) <= 0) {
+		printf("inet_pton error for %s\n", argv[1]);
+		return -1;
+	}
+	if (connect(sockfd, (SA *)&servaddr, sizeof(servaddr)) < 0) {
+		printf("connect error\n");
+		return -1;
+	}
+	while ((n = read(sockfd, recvline, MAXLINE)) > 0) {
+		recvline[n] = '\0';
+		printf("%s", recvline);
+	}
+	if (n < 0) {
+		printf("read error\n");
+		return -1;
+	}
+	return 0;
+}
+#include "graph.h"
+
+typedef CELL *LIST;
+
+/* create an empty list which has size elements */
+
+
+void creatList(LIST* plist) {
+	*plist = NULL;
+	addList(NULL, plist);
+}
+
+LIST listInit(int size) {
+	LIST list = NULL;
+	while (size--)
+		addList(NULL, &list);
+	return list;
+}
+
+
+int addList(VERTEX* vertex, LIST* listptr) {
+	CELL* p = *listptr;
+	if ((*listptr = (LIST)malloc(sizeof(CELL))) == NULL)
+		return 0;
+	(*listptr) -> next = p;
+	(*listptr) -> v = vertex;
+	return 1;
+} 
+
+
+int sizeOfList(LIST* listptr) {
+	int i;
+	for (i = 0; *listptr != NULL; *listptr = (*listptr) -> next)
+		++i;
+	return i;
+}
+
+void emptyList(LIST* listptr) {
+	CELL *p, *q;
+	for (p = *listptr; p != NULL; p = q) {
+		q = p -> next;
+		free(p);
+	}	
+	*listptr = NULL;
+}
+
+void printList(LIST* listptr) {
+	CELL *p = *listptr;
+	for ( ; p != NULL; p = p -> next)
+		printf("%s ", p -> v -> name);
+	printf("\n");
+}
+
+
+/** part2. circle list **/
+
+
+typedef struct cirlist {
+	int listSize;
+	LIST p;
+} CIRLIST;
+
+/* initializing a list */
+void cirListInit(CIRLIST* clp) {
+	clp -> listSize = 0;
+	clp -> LIST = NULL;
+}
+
+void addCirList(VERTEX* vertex, CIRLIST* cl) {
+	if (cl -> p == NULL) {	/* add first vertex */
+		cl -> p = (LIST)malloc(sizeof(CELL));
+		cl -> p -> next = cl -> p;
+	}
+	else {			/* add vertex in front */
+		LIST temp = cl -> p -> next;
+		cl -> p = cl -> p -> next = (LIST)malloc(sizeof(CELL));
+		cl -> p -> next = temp;
+	}
+
+	cl -> p -> v = (VERTEX* )malloc(sizsof(VERTEX));
+	strcpy(cl -> p -> v -> name, vertex -> name);
+	cl -> p -> v -> colored = vertex -> colored;
+	cl -> p -> v -> number = vertex -> number;
+
+	cl -> listSize += 1;
+}
+	
+int sizeOfCir(CIRLIST* cl) {
+	return cl -> size;
+}
+
+	
+/* definition of graph */
+/* use a circle list to hold vertices */
+
+typedef struct graph {
+	CIRLIST* vertices;
+	int size;
+	char m[GLIMIT][GLIMIT];
+} GRAPH;
+
+/* creat a graph according to string array names */
+/* e.g. char* names[] = {"name1", "name2", ... , ""};
+	there is a zero sting marks the end. */
+/* the matrix's size must be consistent with that of names */
+void graphInit(GRAPH* G, char* names[], char matrix[][GSIZE]) {
+	printf("graph initializing:\n");
+	int i, j;
+	VERTEX vertex;
+	cirListInit(G -> vertices);
+	for (i = 0; strcmp(names[i], ""); i++) {
+		strcpy(vertex.name, names[i]);
+		vertex.number = i + 1;
+		vertex.colored == false;
+		addCirList(*vertex, G -> vertices);
+		printf("%s\n", G -> vertices -> p -> v -> name);
+	}			
+	
+	G -> size = i;
+	printf("graph size is: %d\nconnection matrix:\n", G -> size);
+
+	for (i = 0; i < G -> size; ++i) {
+		for (j = 0; j < G -> size; ++j) { 
+			G -> m[i][j] = matrix[i][j];
+			printf("%d ", G -> m[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+/* if vertex number i is adjcent with vertex number j in graph G */
+bool isAdjcent(int i, int j, GRAPH* G) {
+	return G -> m[i-1][j-1] == 1 ? true : false;
+}
+
+
+bool isAllColored(GRAPH* G) {
+	int i;
+	LIST q;
+	for (i = 0, q = G -> vertices -> p; i < G -> size; ++i) {
+		if (G -> q -> v -> colored == false)
+			return false;
+		q = q -> next;
+	}
+	return true;
+}
+
+void uncolor(GRAPH *G) {
+	int i;
+	LIST q;
+	for (i = 0, q = G -> vertices -> p; i < G -> size; ++i) {
+		q -> v -> colored = false;
+		q = q -> next;
+	}
+}
+
+
+/* if vertex number i is adjcent with a partial set of graph G */
+bool isSetAdjcent(LIST* listptr, int i, GRAPH* G) {
+	CELL *p;
+	for(p = *listptr; p != NULL; p = p -> next)
+		if (isAdjcent(G -> vertices -> p -> v -> number, p -> v -> number, G))
+			return true;
+	return false;
+}
+/* 2015-5-10 
+	修改了图的节点的数据类型
+	练习使用简单循环链表（自己写的）
+	穷举所有的着色模式
+*/
+/* 2015-5-9 整理数据结构及添加其方法
+
+		图结构
+			结点数组
+			结点数
+			关联矩阵
+		方法
+			是否全部着色
+			节点是否相连
+*/
+			
+/* 2015-5-7 big modify
+	remove struct graph, using vertex array */
+/* 2015-5-6 */
+/* DATA STRUCTURE AND ALGORITHM, CHAPTER 1 */
+/* greedy.c
+	greedy algorithm applies to graph coloring */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* typedefs */
+/* ... */
+
+/* function declarations */
+
+
+main() {
+	int i;
+	LIST q;
+	GRAPH g;
+	graphInit(&g, names, matrix);
+
+	LIST newclr = listInit(0);
+	for (i = 0, q = g.p; i < g.size; ++i) {
+		uncolor(&g);
+		while (!isAllColored(&g) {
+			color(&g, q, &newclr);
+			printList(&newclr);
+		} 	 	
+		q = q -> next;
+		printf("\n\n");
+	}
+
+	return 0; 
+	
+}
+
+/* definition of graph */
+
+#define NSIZE 3
+#define GLIMIT 100	/* size limit of a graph */
+#define GSIZE 13	/* for use in this program */
+typedef enum bool { false, true } bool;
+
+typedef struct vertex {
+	bool colored;
+	char name[NSIZE];
+	int number;
+} VERTEX;
+
+	
+
+/* definition of list */
+
+
+typedef struct cell {
+	VERTEX* v;
+	struct cell* next;
+} CELL;
+
+/***part 1. linked pist**/
+
+typedef CELL *LIST;
+
+/* create an empty list which has size elements */
+LIST listInit(int size) {
+	LIST list = NULL;
+	while (size--)
+		addList(NULL, &list);
+	return list;
+}
+
+
+int addList(VERTEX* vertex, LIST* listptr) {
+	CELL* p = *listptr;
+	if ((*listptr = (LIST)malloc(sizeof(CELL))) == NULL)
+		return 0;
+	(*listptr) -> next = p;
+	(*listptr) -> v = vertex;
+	return 1;
+} 
+
+
+int sizeOfList(LIST* listptr) {
+	int i;
+	for (i = 0; *listptr != NULL; *listptr = (*listptr) -> next)
+		++i;
+	return i;
+}
+
+void emptyList(LIST* listptr) {
+	CELL *p, *q;
+	for (p = *listptr; p != NULL; p = q) {
+		q = p -> next;
+		free(p);
+	}	
+	*listptr = NULL;
+}
+
+void printList(LIST* listptr) {
+	CELL *p = *listptr;
+	for ( ; p != NULL; p = p -> next)
+		printf("%s ", p -> v -> name);
+	printf("\n");
+}
+
+
+/** part2. circle list **/
+
+
+typedef struct cirlist {
+	int listSize;
+	LIST p;
+} CIRLIST;
+
+/* initializing a list */
+void cirListInit(CIRLIST* clp) {
+	clp -> listSize = 0;
+	clp -> LIST = NULL;
+}
+
+void addCirList(VERTEX* vertex, CIRLIST* cl) {
+	if (cl -> p == NULL) {	/* add first vertex */
+		cl -> p = (LIST)malloc(sizeof(CELL));
+		cl -> p -> next = cl -> p;
+	}
+	else {			/* add vertex in front */
+		LIST temp = cl -> p -> next;
+		cl -> p = cl -> p -> next = (LIST)malloc(sizeof(CELL));
+		cl -> p -> next = temp;
+	}
+
+	cl -> p -> v = (VERTEX* )malloc(sizsof(VERTEX));
+	strcpy(cl -> p -> v -> name, vertex -> name);
+	cl -> p -> v -> colored = vertex -> colored;
+	cl -> p -> v -> number = vertex -> number;
+
+	cl -> listSize += 1;
+}
+	
+int sizeOfCir(CIRLIST* cl) {
+	return cl -> size;
+}
+
+	
+/* definition of graph */
+/* use a circle list to hold vertices */
+
+typedef struct graph {
+	CIRLIST* vertices;
+	int size;
+	char m[GLIMIT][GLIMIT];
+} GRAPH;
+
+/* creat a graph according to string array names */
+/* e.g. char* names[] = {"name1", "name2", ... , ""};
+	there is a zero sting marks the end. */
+/* the matrix's size must be consistent with that of names */
+void graphInit(GRAPH* G, char* names[], char matrix[][GSIZE]) {
+	printf("graph initializing:\n");
+	int i, j;
+	VERTEX vertex;
+	cirListInit(G -> vertices);
+	for (i = 0; strcmp(names[i], ""); i++) {
+		strcpy(vertex.name, names[i]);
+		vertex.number = i + 1;
+		vertex.colored == false;
+		addCirList(*vertex, G -> vertices);
+		printf("%s\n", G -> vertices -> p -> v -> name);
+	}			
+	
+	G -> size = i;
+	printf("graph size is: %d\nconnection matrix:\n", G -> size);
+
+	for (i = 0; i < G -> size; ++i) {
+		for (j = 0; j < G -> size; ++j) { 
+			G -> m[i][j] = matrix[i][j];
+			printf("%d ", G -> m[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+/* if vertex number i is adjcent with vertex number j in graph G */
+bool isAdjcent(int i, int j, GRAPH* G) {
+	return G -> m[i-1][j-1] == 1 ? true : false;
+}
+
+
+bool isAllColored(GRAPH* G) {
+	int i;
+	LIST q;
+	for (i = 0, q = G -> vertices -> p; i < G -> size; ++i) {
+		if (G -> q -> v -> colored == false)
+			return false;
+		q = q -> next;
+	}
+	return true;
+}
+
+void uncolor(GRAPH *G) {
+	int i;
+	LIST q;
+	for (i = 0, q = G -> vertices -> p; i < G -> size; ++i) {
+		q -> v -> colored = false;
+		q = q -> next;
+	}
+}
+
+
+/* if vertex number i is adjcent with a partial set of graph G */
+bool isSetAdjcent(LIST* listptr, int i, GRAPH* G) {
+	CELL *p;
+	for(p = *listptr; p != NULL; p = p -> next)
+		if (isAdjcent(G -> vertices -> p -> v -> number, p -> v -> number, G))
+			return true;
+	return false;
+}
+
+
+
+
+/* test */
+
+/* color - color a graph using greedy algorithm */ 
+/* coloring starts from vertex pointed by q */
+void color(GRAPH* graphptr, LIST q, LIST* listptr) {
+	int i;
+	emptyList(listptr);
+	for (i = 0; i < graphptr -> size; ++i) {
+		if (q -> colored == false) 
+			if (!isSetAdjcent(listptr, q -> number, graphptr)) {
+				addList(q, listptr);
+				q -> colored = true;
+			}
+		q = q -> next;
+	}
+}				
+
+
+
+/* connection matrix */
+/* use char instead of int for small numbers */
+char matrix[GSIZE][GSIZE] = {
+	{0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0},
+	{0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0},
+	{1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0},
+	{1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0},
+	{0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0},
+	{0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+};
+
+/* vertices' names */
+char* names[] = {
+	"ab", "ac", "ad",
+	"ba", "bc", "bd",
+	"da", "db", "dc",
+	"ea", "eb", "ec", "ed", ""};
+
+main() {
+	int i;
+	LIST q;
+	GRAPH g;
+	graphInit(&g, names, matrix);
+
+	LIST newclr = listInit(0);
+	for (i = 0, q = g.p; i < g.size; ++i) {
+		uncolor(&g);
+		while (!isAllColored(&g)) {
+			color(&g, q, &newclr);
+			printList(&newclr);
+		} 	 	
+		q = q -> next;
+		printf("\n\n");
+	}
+
+	return 0; 
+	
+}
+	
+
+
+
+
+
+/*********************************************not use************************************************
+ 
+void g_init (graph* g) { 
+	g->vertices =  calloc (GSIZE, sizeof(vertex));	
+	g->size = GSIZE;
+	int i;
+	vertex* v;
+	for (i = 0; i < GSIZE; ++i) {
+		v = g->vertices + i;
+		v->colored = false;
+		v->number = i+1;
+		strcpy(v->name, names[i]);
+		printf("graph initialization:\n");
+		printf("%d: %s, %d\n", v->number, v->name, v->colored);
+	}
+}
+
+
+
+bool all_colored(vertex gr[]) {
+	int i;
+	for (i = 0; i < GSIZE; ++i)
+		if (gr[i].colored == false)
+			return false;
+	return true;
+}
+
+
+
+
+typedef struct cell {
+	vertex * v;
+	struct cell * next;
+} CELL;
+
+
+cell* add(vertex* w, cell* li) {
+	cell* temp = li;
+	li = (cell *)malloc(sizeof(cell));
+	li -> v = w;
+	li -> next = temp;
+	return li;
+}	
+
+
+
+bool adjcent(vertex* v, cell* list) {
+	cell* p;
+	for (p = list; p != NULL; p = p->next)
+		if (m[p->v->number - 1][v->number - 1] == 1)
+			return true;
+	return false;
+}
+
+
+
+main() {
+	vertex g[GSIZE];
+	int i;
+	for (i = 0; i < GSIZE; ++i) {
+		g[i].colored = false;
+		strcpy(g[i].name, names[i]);
+		g[i].number = i + 1;
+		printf("%d: %s, %d\n",
+			g[i].number, g[i].name, g[i].colored);
+	}
+ 
+	cell* newclr;
+
+
+	vertex* v;
+	cell* p;
+
+	printf("is graph all colored? %d\n", all_colored(g));
+	while (!all_colored(g)) {
+		newclr = NULL;
+		for (i = 0; i < GSIZE; ++i) {
+			v = g + i;
+			if (v->colored == false && !adjcent(v, newclr)) {
+				newclr = add(v, newclr);
+				v -> colored = true;
+			}	
+		}	
+		for (p = newclr; p != NULL; p = p -> next)
+			printf("%s ", p->v->name);
+		printf("\n");
+	}
+
+	return 0;
+}	
+
+
+*******************************************************not use****************************************/
+/* filename: hello.c - print out "hello, world!"
+   date: 2015-10-15 */
+
+#include <stdio.h>
+
+main() {
+	printf("hello, world.\n");
+}
+/* 
+file name: hist.c - histogram of occurance of alphabets in files
+log:
+	2015-6-9
+	2016-01-12 make it to draw the bar chart. 
+*/
+
+#include <stdio.h>
+
+#define FROMATOZ 26
+#define LEVEL 100    /* levels of bar */ 
+
+int histogram[FROMATOZ] = {0};
+int isalpha2(char c);
+char toupper2(char c);
+
+int main(int argc, char *argv[]) {
+	int i, n, c, total;
+	FILE *fp;
+	
+	if (argc == 1) {
+		printf("error: no input filename!\n");
+		return -1;
+	}
+
+	total = 0;
+	for (i = 1; i < argc; ++i) {
+		if ((fp = fopen(argv[i], "r")) == NULL) {
+			printf("error: can't open \"%s\"\n", argv[i]);
+			return -1;
+		}
+		while ((c = getc(fp)) != EOF)
+			if (isalpha2(c)) {
+				total++;
+				histogram[toupper2(c) - 'A']++;
+			}
+	}
+
+	printf("histogram:\n");
+	for (i = 0; i < FROMATOZ; ++i) {
+		printf("%c: %6d", 'A' + i, histogram[i]);
+		for (n = histogram[i]*LEVEL/total; n > 0; n--)
+			putchar('-');
+		putchar('\n');
+	}
+	printf("TOTAL: %d\n", total);
+	return 0;
+}	
+
+int isalpha2(char c) {
+	return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ? 1 : 0;
+}
+
+char toupper2(char c) {
+	return c >= 'a' && c <= 'z' ? 'A'+c-'a' : c;
+}
+/* 2015-6-9 */
+/* histogram.c - histogram of occurance of alphabets in files */
+
+#include <stdio.h>
+
+#define FROMATOZ 26
+int histogram[FROMATOZ] = {0};
+
+int isalpha2(char c);
+char toupper2(char c);
+
+int main(int argc, char *argv[]) {
+	int i, c, total;
+	FILE *fp;
+	
+	if (argc == 1) {
+		printf("error: no input filename !\n");
+		return 1;
+	}
+
+	for (i = 1; i < argc; ++i) {
+		if ((fp = fopen(argv[i], "r")) == NULL) {
+			printf("error: can't open \"%s\"\n", argv[i]);
+			continue;
+		}
+		else 
+			while ((c = getc(fp)) != EOF)
+				if (isalpha(c)) {
+					c = toupper(c);
+					histogram[c - 'A']++;
+				}	
+	}
+
+	printf("histogram:\n\n");
+
+	for (i = total = 0; i < FROMATOZ; ++i) {
+		total += histogram[i];
+		printf("%c: %d\n", 'A' + i, histogram[i]);
+	}
+	
+	printf("TOTAL: %d\n", total);
+
+	return 0;
+}	
+
+int isalpha2(char c) {
+	return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ? 1 : 0;
+}
+
+char toupper2(char c) {
+	return c > 'Z' ? 'A' + c - 'a' : c;
+}
+/* file name: inout.c
+   change log:
+	2015-11-18 create
+	11-26 change file name from 'getnum.c' to 'inout.c' */
+
+#include "inout.h"
+
+int getnum(int *pn) {
+	int c, sign;
+
+	while (isspace(c = getcha()))
+		;
+	if (c == '-' || c == '+') {
+		sign = c == '-' ? -1 : 1;
+		c = getcha();
+	}
+	if (!isdigit(c) && c != EOF) {
+		ungetcha(c);
+		return 0;
+	}
+	if (c == EOF)
+		return 0;
+	for (*pn = 0; isdigit(c); c = getcha())
+		*pn = *pn * 10 + (c - '0');
+	*pn = *pn * sign;
+	if (c != EOF)
+		ungetcha(c);
+	return c;
+}
+/*
+file name: intsort.c
+log:
+	2015-12-31
+*/
+
+#include <stdio.h>
+#include "/home/liyang/include/sort.h"
+
+#define MAXNUM 100
+
+main() {
+	int i, n;
+	int array1[MAXNUM];
+	int array2[MAXNUM];
+	int array3[MAXNUM];	
+	
+	for (i = 0; i < MAXNUM && (n = getnum()) != EOF; i++)
+		array1[i] = array2[i] = array3[i] = n;
+	bubblesort(array1, i);
+	selectsort(array2, i);
+	insertsort(array3, i);
+	for (n = 0; n < i; n++) {
+		printf("%d ", array1[n]);
+		printf("\n");
+		printf("%d ", array2[n]);
+			
+	
+/* key_count - count keyword */
+
+/* 2015-5-3 */
+/* copied form P133 */
+
+struct key {
+	char *keyword;
+	int count;
+} keytab[] = {
+	"auto",		0,
+	"break",	0,
+	"case",		0,
+	"char",		0,
+	"const",	0,
+	"continue",	0,
+	"default",	0,
+	"do",		0,
+	"double",	0,
+	"else",		0,
+	"enum",		0,
+	"extern",	0,
+	"float",	0,
+	"for",		0,
+	"goto",		0,
+	"if",		0,
+	"int",		0,
+	"long",		0,
+	"register",	0,
+	"return",	0,
+	"short",	0,
+	"signed",	0,
+	"sizeof",	0,
+	"static",	0,
+	"struct",	0,
+	"switch",	0,
+	"typedef",	0,
+	"union",	0,
+	"unsigned",	0,
+	"void",		0,
+	"volatile",	0,
+	"while",	0,
+};	
+
+
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+#define MAXWORD 100
+#define NKEYS (sizeof keytab / sizeof(struct key))
+#define BUFSIZE 100
+
+int buf[BUFSIZE];
+int bufp = 0;
+int getch(void);
+void ungetch(int);
+int getword(char *, int);
+int bisearch(char *, struct key *, int);
+
+/* count C keywords */
+main() {
+	int n;
+	char word[MAXWORD];
+
+	while (getword(word, MAXWORD) != EOF)
+		if (isalpha(word[0]))
+			if ((n = bisearch(word, keytab, NKEYS)) >= 0)
+				keytab[n].count++;
+	for (n = 0; n < NKEYS; n++)
+		if (keytab[n].count > 0)
+			printf("%s: %4d\n", keytab[n].keyword, keytab[n].count);
+	return 0;
+}
+
+
+/* bisearch(): find keyword in keytab[0], ... , keytab[n-1] */
+int bisearch(char* word, struct key tab[], int n) {
+	int cond;
+	int low, high, mid;
+
+	low = 0, high = n - 1;
+	while (low <= high) {
+		mid = (low + high)/2;
+		if ((cond = strcmp(word, tab[mid].keyword)) < 0)
+			high = mid - 1;
+		else if (cond > 0)
+			low = mid + 1;
+		else
+			return mid;
+	}
+	return -1;
+}
+
+
+/* getch and ungetch */
+int getch(void) {
+	return bufp > 0 ? buf[--bufp] : getchar();
+}
+void ungetch(int c) {
+	if (bufp >=  BUFSIZE)
+		printf("buffer is full, %c is not pushed", c);
+	else
+		buf[bufp++] = c; 
+}
+
+
+/* getword: get next word or character from input */
+int getword(char *word, int lim) {
+	int c;
+	char *w = word;
+
+	while (isspace(c = getch()))
+		;		
+	if (c != EOF)
+		*w++ = c;
+	if (!isalpha(c)) {
+		*w = '\0';
+		return c;
+	}
+	for (; --lim > 0; w++) 
+		if (!isalnum(*w = getch())) {
+			ungetch(*w);
+			break;
+		}
+	*w = '\0';
+	return word[0];
+}	
+/*
+file name: keycount.c
+log:
+	2015-12-26 create
+*/
+
+struct key {
+	char *word;
+	int count;
+};
+
+struct key keytab[] = {
+	"auto", 0,
+	"break", 0,
+	"case", 0,
+	"char", 0,
+	"const", 0,
+	"continue", 0,
+	"default", 0,
+	"do", 0,
+	"double", 0,
+	"else", 0,
+	"enum", 0,
+	"extern", 0,
+	"float", 0,
+	"for", 0,
+	"goto", 0,
+	"if", 0,
+	"int", 0,
+	"long", 0,
+	"register", 0,
+	"return", 0,
+	"short", 0,
+	"signed", 0,
+	"sizeof", 0,
+	"static", 0,
+	"struct", 0,
+	"switch", 0,
+	"typedef", 0,
+	"union", 0,
+	"unsigned", 0,
+	"void", 0,
+	"volatile", 0,
+	"while", 0
+};
+
+#include <stdio.h>
+#include <ctype.h>
+#include "/home/liyang/include/strings.h"
+#include "/home/liyang/include/text.h"
+
+#define MAXWORD 100
+#define NKEYS (sizeof keytab / sizeof keytab[0])
+
+struct key *binsearch(char *, struct key *, int);
+
+main() {
+	struct key *kp;
+	char word[MAXWORD];
+
+	while (getword(word, MAXWORD) != EOF)
+		if (isalpha(word[0]))
+			if ((kp = binsearch(word, keytab, NKEYS)) != NULL)
+				kp->count++;
+	for (kp = keytab; kp < keytab + NKEYS; kp++)
+		printf("%10s %d\n", kp->word, kp->count);
+	return 0;
+} 
+
+struct key *binsearch(char *name, struct key *tab, int n) {
+	int cond;
+	struct key *low = &tab[0]; 
+	struct key *high = &tab[n]; 
+	struct key *mid;
+
+	while (low < high) {
+		mid = low + (high - low) / 2;
+		if ((cond = cmpstr(name, mid->word)) > 0)
+			low = mid + 1;
+		else if (cond < 0)
+			high = mid;
+		else
+			return mid;
+	}
+	return NULL;
+}	
+/* lineword.c - print input one word per line */
+
+#include <stdio.h>
+#include <ctype.h>
+
+#define IN 1
+#define OUT 2
+
+main() {
+	int c, state;
+
+	state = OUT;
+	while ((c = getchar()) != EOF) {
+		if (!isspace(c)) {
+			state = IN;
+			putchar(c);
+		} else if (state == IN) {
+			state = OUT;
+			putchar('\n');
+		}
+	}
+}
+/*******************************************************************
+* TITLE: longest.c
+*
+* FUNCTION: printout the longest line of standard input
+*
+* CHANGE LOG:
+*	2015-4-14 copy from THE C PROGRAMMING LANGUAGE 2ND EDITION
+*	2016-3-2  print out the corrent line length and as much as
+*		  possible of the text
+********************************************************************/
+
+#include <stdio.h>
+
+#define MAXLEN 80 
+
+int getlin(char s[], int len);
+void copy(char dst[], char src[]);
+
+main() {
+	int n;
+	int len; /* current line length */
+	int max; /* maximum line length */
+	char line[MAXLEN+1];
+	char tmp[MAXLEN+1]; 
+	char longest[MAXLEN+1]; 
+
+	max = len = 0;
+	while ((n = getlin(line, MAXLEN)) > 0) {
+		len += n;
+		if (len <= MAXLEN)
+			copy(tmp, line);
+		if (line[n-1] == '\n') {
+			if (len > max) {
+				max = len;
+				copy(longest, tmp);
+			}
+			len = 0;
+		}
+	}
+
+	if(max > 0)	/* if there is a line */
+		printf("%s\n%d\n", longest, max);	
+}
+
+int getlin(char s[], int len) {
+	int i, c;
+
+	for (i = 0; i < len - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+		s[i] = c;
+	if (c == '\n')
+		s[i++] = c;
+	s[i] = '\0';
+	return i;
+}	
+
+void copy(char dst[], char src[]) {
+	int i = 0;
+
+	while ((dst[i] = src[i]) != '\0')
+		++i;
+}
+/* longest2.c - external variable version of longest.c */
+ 
+#include <stdio.h>
+
+#define MAXLEN 80 
+
+char line[MAXLEN+1]; 
+char tmp[MAXLEN+1];
+char longest[MAXLEN+1]; 
+
+int getlin(void);
+void copytmp(void);
+void copy(void);
+
+main() {
+	int n;
+	int len; /* current line length */
+	int max; /* maximum line length */
+	extern char line[], longest[]; 
+
+	max = len = 0;
+	while ((n = getlin()) > 0) {
+		len += n;
+		if (len <= MAXLEN)
+			copytmp();
+		if (line[n-1] == '\n') {
+			if (len > max) {
+				max = len;
+				copy();
+			}
+			len = 0;
+		}
+	}
+
+	if(max > 0)	/* if there is a line */
+		printf("%s\n%d\n", longest, max);	
+}
+
+int getlin(void) {
+	int i, c;
+	extern char line[];
+
+	for (i = 0; i < MAXLEN - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
+		line[i] = c;
+	if (c == '\n')
+		line[i++] = c;
+	line[i] = '\0';
+	return i;
+}	
+
+void copy(void) {
+	int i = 0;
+	extern char tmp[], longest[];
+
+	while ((longest[i] = tmp[i]) != '\0')
+		++i;
+}
+
+void copytmp(void) {
+	int i = 0;
+	extern char line[], tmp[];
+
+	while ((tmp[i] = line[i]) != '\0')
+		++i;
+}
+#include <stdio.h>
+#include "/home/liyang/include/text.h"
+
+#define MAXLIN 1000 
+#define LINLIM 80
+
+main() {
+	char lin[MAXLIN];
+	int i;
+
+	while ((i = getlin(lin, MAXLIN)) > 0)
+		if (i > LINLIM)
+			printf("%s", lin);
+}
+#include <stdio.h>
+
+/* header for miniprintf() */
+#include <stdio.h>
+#include <stdarg.h>
+#define SLEN 8 /* for itox, itos */
+void reverse(char s[]);
+void itox(int n, char s[]);
+void itos(int n, char c, char s[]);
+void miniprintf(char *fmt, ...);
+
+main() {
+	int i;
+	miniprintf("%");
+	miniprintf("ASCII printable characters:\n");
+	for (i = 33; i < 128; ++i) {
+		miniprintf("%x: %c\n", i, i);
+	}
+	miniprintf("%d %o %b\n", 128, 128, 128);
+}
+
+/* function definitions for miniprintf() */
+
+/* use itos() instead, itox() - convert integer to hexadecimal 2's complement */
+void itox(int n, char s[]) {
+	int i, r;
+	unsigned int m = (unsigned int) n;
+
+	for (i = 0; i < SLEN - 3; ++i) {
+		if ((r = m % 16) >= 10)
+			s[i] = r - 10 + 'A';
+		else
+			s[i] = r + '0';
+		m /= 16;
+	}
+	s[SLEN - 1] = '\0';
+	s[SLEN - 2] = '0';
+	s[SLEN - 3] = 'x';
+
+	reverse(s);
+}
+
+/* itos - convert integer to string of he(x)adecimal, (d)ecimal, (o)ctal, (b)inary */
+void itos(int n, char c, char s[]) {
+	int i, base, r;
+		case 'b': base = 2; break;
+	}
+
+	for (i = 0; n && i < SLEN - 1; n /= base, ++i) {
+		if ((r = n % base) < 10)
+			s[i] = r + '0';
+		else
+			s[i] = r - 10 + 'A';
+	}
+	s[i] = '\0';
+
+	reverse(s);
+}
+	
+
+/* miniprintf */
+
+void miniprintf(char* fmt, ...) {
+	va_list ap;
+	char *p, *sval, s[SLEN];
+	int ival;
+
+	va_start(ap, fmt);	/* let ap points to final named argument fmt */
+	for (p = fmt; *p; ++p) {
+		if (*p != '%') {
+			putchar(*p);
+			continue;
+		}
+		switch(*++p) {
+			case '\0':
+				return;
+			case 'x': case 'd': case 'o': case 'b':
+				ival = va_arg(ap, int);
+				itos(ival, *p, s);
+				miniprintf("%s", s);
+				break;
+			case 'c':
+				ival = va_arg(ap, int);
+				putchar(ival);	
+				break;
+			case 's':
+				for (sval = va_arg(ap, char*); *sval; ++sval)
+					putchar(*sval);
+				break;
+			default:
+				putchar(*p);
+				break;
+		}
+	}
+	va_end(ap);	/* do clean up */
+}
+
+/* reverse() - reverse a string */
+
+void reverse(char s[]) {
+	int i, j, temp;
+	
+	for (j = 0; s[j]; ++j)
+		;
+	for (i = 0, --j; i < j; ++i, --j) {
+		temp = s[i];
+		s[i] = s[j];
+		s[j] = temp;
+	}
+}
+
+
+/* 2015-9-17 */
+/* 2015-4-26 */
+void miniprintf(char* fmt, ...) {
+	va_list ap;
+	char *p, *sval, s[SLEN];
+	int ival;
+
+	va_start(ap, fmt);	/* let ap points to final named argument fmt */
+	for (p = fmt; *p; ++p) {
+		if (*p != '%') {
+			putchar(*p);
+			continue;
+		}
+		switch(*++p) {
+			case '\0':
+				return;
+			case 'x': case 'd': case 'o': case 'b':
+				ival = va_arg(ap, int);
+				itos(ival, *p, s);
+				miniprintf("%s", s);
+				break;
+			case 'c':
+				ival = va_arg(ap, int);
+				putchar(ival);	
+				break;
+			case 's':
+				for (sval = va_arg(ap, char*); *sval; ++sval)
+					putchar(*sval);
+				break;
+			default:
+				putchar(*p);
+				break;
+		}
+	}
+	va_end(ap);	/* do clean up */
+}
+/* 2015-5-13 */
+/* Array Implementation of List P41 */
+/* implementation of my_list2.h */
+
+#include <stdio.h>
+#include <string.h>
+#include "my_list2.h"
+
+/* previous() and next() gaurantee the returned position is correct */
+/* return a position previous to the current position p of LIST L, 1 if p <= 1 */	
+position previous(position p, LIST *Lp) {
+	return p <= 1 ? 1 : p - 1;
+} /* previous */
+
+/* returns the next position, end(L) if last position */
+position next(position p, LIST *Lp) { return p >= Lp->last ? end(Lp) : p + 1; } /* next */
+
+/* return 1, if L is empty, return end(L) */
+position first(LIST *Lp) {
+	return Lp->last == 0 ? end(Lp) : 1; 
+} /* first */ 
+
+/* returns the position next to L's last element */
+position end(LIST *Lp) {
+	return Lp->last + 1;	/* why: for covenient in loop; for locate() */
+} /* end */
+
+/* makes L a empty list, returns end(L) */
+position makenull(LIST *Lp) {
+	Lp->last = 0;
+	return end(Lp);
+} /* makenull */
+
+
+/* mine 
+void insert(position p, elementtype elem, LIST list) {
+	position i;
+	if (p < 1 || p > list.last) {
+		printf("bad position: %d.", p);
+		return;
+	}
+	if (end(list) >= MAXLEN + 1) {
+		printf("list is full, can't insert!\n");
+		return;
+	}
+	for (i = list.last; i >= p; --i)	
+		list.element[i + 1] = list.element[i];
+	list.element[p] = elem;
+	list.last++;
+}			
+*/
+
+
+/* insert and delete should use with correct position p */
+/* insert element x to position p (include the end(L) position) in L */
+void insert(elementtype x, position p, LIST *Lp) {
+	if (Lp->last >= MAXLEN)
+		printf("error: list is full, can't insert!\n");
+	else {
+		position i;
+		for (i = Lp->last; i >= p; i--)
+		/* shift elements follow element[p] included down one position */
+			Lp->element[i + 1] = Lp->element[i];
+		Lp->last++;
+		Lp->element[p] = x;
+	}
+} /* insert */ 
+
+/* deletes element in position p */
+void delete(position p, LIST *Lp) {
+	Lp->last--;
+	position i;
+	for ( ; p <= Lp->last; ++p)
+		Lp->element[p] = Lp->element[p + 1];	
+} /* delete */
+	
+/* returns the position of element x in L, end(L) if x doesn't exist */
+position locate(elementtype x, LIST *Lp) {
+	position p;
+	for (p = 1; p <= Lp->last; ++p)
+		if (Lp->element[p] == x)
+			return p;
+	return Lp->last + 1;	/* not found */
+} /* locate */
+
+/* returns the element value of position p */
+elementtype retrieve(position p, LIST *Lp) { return Lp->element[p]; } /* retrieve */
+
+void purge(LIST *Lp) {
+	position p, q;
+	p = first(Lp);
+	while (p < end(Lp)) {
+		q = next(p, Lp);
+		while (q < end(Lp)) {
+			if (strcmp(Lp->element[q], Lp->element[p]) == 0)
+				delete(q, Lp);
+			else
+				q = next(q, Lp);
+		}
+		p = next(p, Lp);
+	}
+}	
+#include <stdio.h>
+#include "/home/liyang/include/text.h"
+
+#define MAXLIN 100
+
+main() {
+	char lin[MAXLIN];
+	int i;
+
+	while ((i = getlin(lin, MAXLIN)) > 0)
+		if (i > 1) { /* non-empty line */
+			for (i = i - 2; i >= 0 && (lin[i] == ' ' || lin[i] == '\t'); i--)
+				;
+			if (i >= 0) {           /* non-blank line */
+				lin[++i] = '$'; /* for test, mark the end */
+				lin[++i] = '\n';
+				lin[++i] = '\0';
+				printf("%s", lin);
+			}
+		}	
+}
+/* filename: nn.c - return n^n */
+/* date: 2015-10-13 */
+
+long nn(int n) {
+	int n1;
+	long n2;
+
+	if (n <= 0)
+		return 0;
+	for (n1 = n - 1, n2 = n; n1 > 0; --n1)
+		n2 *= n;
+
+	return n2;
+}	
+/*
+file name: numbers.c
+log:
+	2015-10-13 write nn
+	     12-12 change to numbers.c, write power
+*/
+
+long power(int pow, int n) {
+	long n1;
+
+	if (pow < 0 || n == 0)
+		return 0L;
+	for (n1 = 1L; pow-- > 0; n1 *= n)
+		;
+	return n1;
+}
+/* prime.c - print out first 500 prime numbers */
+/* 2015-6-12 */
+
+#include <stdio.h>
+#define NUMPRIME 500 
+
+int main() {
+	int buf1[NUMPRIME], i, j, k;
+
+	buf1[0] = 2;
+	i = 2; /* index of prime */
+	j = 1;
+
+	while (i <= 500) {
+		for (k = 2; k < i; ++k)
+			if ((2 * j + 1) % buf1[k - 1] == 0) /* not a prime */
+				break;
+
+		if (k == i) { /* find a prime */
+			buf1[i - 1] = 2 * j + 1;
+			++i;
+		}
+
+		++j;
+	}
+	
+	for (i = 0; i < NUMPRIME; ++i)
+		printf("%3d:\t%4d\n", i, buf1[i]);
+
+	return 0;
+}
+/* rb.c - reduce multiple blacks in input to one */
+
+#include <stdio.h>
+
+main() {
+	char c, tmp;
+
+	for (tmp = 'a'; (c = getchar()) != EOF; tmp = c)
+		if (c != ' ' && c != '\n' || c != tmp) {
+			if (c == '\t') {
+				putchar('\\');
+				putchar('t');
+			} else if (c == '\b') {
+				putchar('\\');
+				putchar('b');
+			} else if (c == '\\') {
+				putchar('\\');
+				putchar('\\');
+			} else
+				putchar(c);
+		}
+}
+#include <stdio.h>
+#include "/home/liyang/include/text.h"
+#include "/home/liyang/include/strings.h"
+
+#define MAXLIN 100 
+
+main() {
+	char lin[MAXLIN];
+	int i, j;
+
+	while ((i = getlin(lin, MAXLIN)) > 0) { 
+		if (lin[--i] == '\n')
+			--i;
+		for (j = 0; j < i; ++j, --i)	
+			SWAPT(char, lin[j], lin[i]);
+		printf("%s", lin);
+	}
+}
+/*
+file name: search.c
+log:
+	2015-12-25 merry christmas !
+	           write binsearch
+*/
+
+#include "/home/liyang/include/strings.h"
+#include "/home/liyang/include/search.h"
+
+int binsearch(char *word, struct key tab[], int n) {
+	int cond;
+	int low, high, mid;
+
+	low = 0;
+	high = n - 1;
+	while (low <= high) {
+		mid = (low + high) / 2;
+		if ((cond = cmpstr(word, tab[mid].word)) > 0)
+			low = mid + 1;
+		else if (cond < 0)
+			high = mid - 1;
+		else
+			return mid;
+	}
+	return -1;
+}
+
+/*
+file name: slist.c - simple list methods
+change log:
+	2015-12-4 create: 实现链表的创建与遍历。
+*/
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "/home/liyang/include/slist.h"
+
+slist *listcrt(slist *list, char *name) {
+	strcpy(list -> title, name);
+	list -> next = NULL;
+	return list;
+}
+
+slist *listadd(slist *l, char *name) {
+	slist *lp;
+	
+	for (lp = l; lp -> next != NULL; lp = lp -> next)
+		;
+	lp -> next = listcrt(MALLOCT(slist), name);
+	return l;
+}	
+
+void listprt(slist *l) {
+	for ( ; l != NULL; l = l -> next)
+		printf("%s\n", l -> title);
+}
+/* file name: sort.c
+   log:
+	2015-11-17 bubsort.c
+	     11-18 change to more bubble-like comparation
+	     12-10 change file name to sort.c */
+
+#include "sort.h"
+
+void swap(int *a, int *b) {
+	int tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+void bublesort(int v[], int lim) {
+	int i, j;
+
+	for (i = lim - 1; i > 0; --i)
+		for (j = 0; j < i; ++j)
+			if (v[j] > v[j + 1])
+				swap(&v[j], &v[j + 1]);	
+}
+
+void selectsort(int v[], int lim) {
+	int i, j;
+
+	for (i = lim - 1; i > 0; --i)
+		for (j = 0; j < i; ++j)
+			if (v[j] > v[i])
+				swap(&v[j], &v[i]);
+}
+
+void insertsort(int v[], int lim) {
+	int i, j, l, temp;
+
+	for (i = lim - 1; i > 0; --i) {
+		temp = v[i - 1];
+		for (j = i; j <= lim - 1 && v[j] < temp; ++j)
+			;
+		for (l = j - 1; l > i; --l)
+			v[l - 1] = v[l];
+		v[j - 1] = temp;
+	}
+}
+
+void insertsort2(int v[], int lim) {
+	int i, j;
+
+	for (i = 0; i < lim-1; i++)
+		for (j = i; j >= 0 && v[j] > v[j+1]; j--)
+			swap(&v[j], &v[j+1]);
+}
+
+void shellsort(int v[], int lim) {
+	int m, i, j;
+
+	for (m = lim / 2; m > 0; m /= 2)
+		for (i = 0; i < lim - m; i++)
+			for (j = i; j >= 0 && v[j] > v[j+m]; j -= m)
+				swap(&v[j], &v[j+m]);
+}
+
+/* file name: str.c
+change log:
+	2015-5-5   write expand.c
+	2015-11-26 create 
+	2015-11-29 write revstr2
+	2015-12-01 modify copynstr, num2str returns char *
+	2015-12-05 write unescape
+	2015-12-07 move expand, escape, unescape, getstring to text.c,
+	           modify pendstr, pendnstr, copystr...
+	2015-12-26 change the counting of cmpnstr 
+	2016-3-2   move other include lines to str.h */
+
+#include "str.h"
+
+/* return string length */
+int strleng(char *s) {
+	char *t = s;
+
+	while (*s)
+		s++;
+	return s - t;
+}
+
+/* strcat2: concatenate string s and string t (s first in order) */
+char* strcat2(char* s, char* t) {
+	char *temp, *temp2;
+	temp2 = temp = (char *)malloc(strleng(s) + strleng(t) + 1);
+	while (*temp = *s) {
+		temp++;
+		s++;
+	}
+	while (*temp = *t) {
+		temp++;
+		t++;
+	} 
+	return temp2;
+}
+
+int str2num(char *s) {
+	int sign, n;
+
+	sign = (*s == '-') ? -1 : 1;
+	if (*s == '+' || *s == '-')
+		s++;
+	for (n = 0; isdigit(*s); s++)
+		n = n * 10 + *s - '0';
+	return n * sign;
+}	
+
+/* convert integer into decimal string,
+   the result has at most 'len' digits (including '-' if negative) */
+char *num2str(int n, char *s, int len) {
+	int sign;
+	char *p = s + len;
+
+	if ((sign = n) < 0)
+		n = -n;
+	do
+		*s++ = n % 10 + '0';
+	while ((n /= 10) > 0 && s < p); 
+	if (s < p && sign < 0)
+		*s++ = '-';
+	*s = '\0';
+	return revstr(p - len);
+}
+
+/* append string t to the end of string s */
+char *pendstr(char *s, char *t) {
+	char *p;
+
+	for (p = s + strleng(s); *p = *t; p++, t++)
+		;
+	return s;
+}			
+
+char *pendnstr(char *s, char *t, int n) {
+	char *p;
+
+	for (p = s + strleng(s); n-- > 0 && (*p = *t); p++, t++)
+		;
+	if (*p != '\0')
+		*(p + 1) = '\0';
+	return s;
+}	
+
+char *copystr(char *s, char *t) {
+	char *p = s;
+
+	while (*s++ = *t++)
+		;
+	return p;
+}
+
+char *copynstr(char *s, char *t, int n) {
+	char *p = s;
+
+	if (strleng(s) < n)
+		n = strleng(s);
+	while (s < p + n && (*s++ = *t++)) 
+		;
+	while (s < p + n)
+		*s++ = '\0';
+	return p;
+}
+
+char *revstr(char *s) {
+	char *t, *p;
+
+	for (p = s, t = s + strleng(s) - 1; s < t; ++s, --t)
+		swapt(char, *s, *t)
+	return p;
+}	
+
+/* compare s to t, return 0 if s == t, <0 if s < t, or >0 if s > t */
+int cmpstr(char *s, char *t) {
+	while (*s == *t && *s != '\0')
+		s++, t++;
+	return *s - *t;
+}
+
+int cmpnstr(char *s, char *t, int n) {
+	while (--n > 0 && *s == *t && *s != '\0')
+		s++, t++;
+	return *s - *t;
+}
+/*
+file name: test.c
+change log:
+	11-23 test getstring strleng ok! copystr copynstr ok!
+	11-29 test revstr revstr2
+	11-30 test revstr revstr2 ok!
+	12-1  test num2str
+*/
+
+#include <stdio.h>
+#include "/home/liyang/include/strings.h"
+#include "/home/liyang/include/text.h"
+
+#define LEN 100
+
+main() {
+	char word[LEN];
+
+	while (getstring(word, LEN) != EOF) {
+		printf("%s\n", revstr(word));
+	}
+}
+
+
+/* test for my_list2.h */
+
+/*
+#include <stdio.h>
+#include <string.h>
+#include "my_list2.h"
+
+#define MAXWORD 50
+main() {
+	int c;
+	char *s, w[MAXWORD];
+	LIST testlist;
+	position p;
+
+	printf("enter some word:\n");
+
+	makenull(&testlist);
+	p = first(&testlist);
+	while ((c = getstr(w)) != EOF)
+		if (c == '\n')
+			printf("carriage return captured!\n");
+		if (c == NUMB) {
+			printf("%s ", w);
+			insert(w, p, &testlist);
+		}
+	purge(&testlist);
+	for (p = first(&testlist); p < end(&testlist); p = next(p, &testlist)) {
+		s = retrieve(p, &testlist);	
+		printf("%d ", locate(s, &testlist));
+		printf("%s ", s);
+	}
+
+	return 0;
+}
+*/
+#include <stdio.h>
+
+#define BUFSIZE 10000 
+
+main () {
+	char c, buf[BUFSIZE];
+	int i;
+
+	for (i = 0; i < BUFSIZE - 1 && (c = getchar()) != EOF; i++)
+		buf[i] = c;
+	buf[i + 1] = '\0';
+
+	
+
+#include <stdio.h>
+#include "/home/liyang/include/text.h"
+
+#define MAXSTR 1000 
+
+main() {
+	char line[MAXSTR], line1[MAXSTR], line2[MAXSTR], line3[MAXSTR];	
+
+	while (getlin(line, MAXSTR) > 0) {
+		expand(line1, line);
+		unescape(line2, line1);
+		escape(line3,line2);
+		printf("%s\n%s\n%s\n", line1, line2, line3);
+	}
+}	
+
+/* 2015-11-13 test_getfloat.c */
+
+#include <stdio.h>
+#include "getnum.c"
+
+main() {
+	float a;
+
+	while (getfloat(&a) > 0)
+		printf("%.6f\n", a);
+}
+/* 2015-11-8 test_getnum.c */
+
+#include <stdio.h>
+#include "getnum.c"
+
+main() {
+	int n, a;
+
+	while ((a = getnum(&n)) != EOF) {
+		if (a > 0)
+			printf("%d\n", n);
+		else
+			printf("%c\n", getcha());
+	}
+}
+/*
+2015-10-13 
+main (int argc, char *argv[]) {
+	int n;
+
+	if (argc != 2) {
+		printf("usage: nn number\n");
+		return;
+	}
+
+	n = str2num(argv[1]);
+	printf("%d power %d is %ld\n", n, n, nn(n));
+	return;
+}	
+*/
+/*
+file name: test_slist.c
+log:
+	2015-12-4
+*/
+
+#include <stdio.h>
+#include "/home/liyang/include/strings.h"
+#include "/home/liyang/include/slist.h"
+
+#define MAXNAME 100 
+
+main() {
+	slist stuff;
+	char name[MAXNAME];
+
+	listcrt(&stuff, "stuff of c programming language");
+	while (getstring(name, MAXNAME) != EOF)
+		listadd(&stuff, name);	
+	printf("list print result:\n");
+	listprt(&stuff);
+}
+	
+/* file name: test_sort.c
+   log:
+	2016-2-18: create */
+
+#include <stdio.h>
+#include "sort.h"
+#include "inout.h"
+
+#define MAXNUM 50000
+
+main() {
+	int i, n, v[MAXNUM];
+
+	for (n = 0; n < MAXNUM && getnum(&v[n]) > 0; n++)
+		;
+	printf("input size: %d\n", n);
+	for (insertsort2(v, n), i = 0; i < n; i++)
+		printf("%d ", v[i]);
+}
+/*
+file name: text.c
+log:
+	2015-12-7  split from strings.c
+	     12-26 write getword 
+*/
+
+#include <stdio.h>
+#include <ctype.h>
+#include "/home/liyang/include/text.h"
+
+static int bp = 0;
+static char buf[BUFSIZE]; 
+
+int getcha(void) {
+	return bp == 0 ? getchar() : buf[--bp];
+}
+
+void ungetcha(int c) {
+	if (bp >= BUFSIZE)
+		printf("input buffer overflow !\n");
+	else
+		buf[bp++] = c;
+}
+
+/* getstr.c - collects alphabetic and numeral strings
+   return EOF or punctuation marks and newline */
+int getstr(char s[]) {
+	int i, c;	
+	while ((c = getchar()) == ' ' || c == '\t') 
+		;
+	if (c == EOF)
+		return EOF;
+	i = 0;
+	if (isalpha(c)) {
+		s[0] = c;
+		while (isalpha(s[++i] = c = getchar()))
+			;
+		s[i] = '\0';
+		ungetc(c, stdin);
+		return ALPH;
+	}
+	if (isdigit(c)) {
+		s[0] = c;
+		while (isdigit(s[++i] = c = getchar()))
+			;
+		s[i] = '\0';
+		ungetc(c, stdin);
+		return NUMB;
+	}
+	return c;
+}
+
+int getstring(char *s, int len) {
+	char c;
+
+	while(isspace(c = getchar()))
+		;
+	for( ; --len > 0 && !isspace(c) && c != EOF; c = getchar())
+		*s++ = c;
+	*s = '\0';
+	return c;
+}	
+
+/* getword - page 136 */
+int getword(char *word, int len) {
+	int c;
+	char *w = word;
+
+	while (isspace(c = getcha()) || c == '/')
+		if (isspace(c)) {
+			continue;
+		} else if ((*w = getcha()) != '*') {
+			ungetcha(*w);
+			*w++ = c;
+			w = '\0';
+			return c;	
+		} else
+			while ((c = getcha()) != EOF)
+				if (c == '*' && getcha() == '/')
+					break;
+	}
+	if (c != EOF)
+		*w++ = c;
+	if (!isalpha(c) && c != '\"') { 
+		*w = '\0';
+		return c;
+	}
+	if (isalpha(c)) {
+		for ( ; --len > 0; ++w)
+			if (!isalnum(*w = getcha())) {
+				ungetcha(*w);
+				break;
+			}
+	} else
+		for ( ; --len > 0; ++w)
+			if ((*w = getcha()) == c) {
+				w++;
+				break;
+			} 
+	*w = '\0';
+	return word[0];
+}
+
+void escape(char *s, char *t) {
+	while (*t) {
+		switch(*t) {
+		case ' ':
+			*s++ = '\\', *s++ = 'b';
+			break;
+		case '\t':
+			*s++ = '\\', *s++ = 't';
+			break;
+		case '\n':
+			*s++ = '\\', *s++ = 'n';
+			break;	
+		default:
+			*s++ = *t;
+			break;
+		}
+		t++;
+	}
+	*s = '\0';
+}
+
+void unescape(char *s, char *t) {
+	while (*t) {
+		if (*t == '\\')
+			switch (*++t) {
+			case 'b':
+				*s++ = ' ';
+				break;
+			case 't':
+				*s++ = '\t';
+				break;
+			case 'n':
+				*s++ = '\n';
+				break;
+			default:
+				*s++ = '\\', *s++ = *t;
+				break;
+			}
+		else
+			*s++ = *t;
+		if (*t == '\0')
+			return;
+		t++;
+	}
+	*s = '\0';
+}
+
+/* expand string like a-z 0-9 to a...z 0...9 */
+void expand(char *dst, char *src) {
+	int headc, i, j, k;
+	headc = '\0';
+	for (i = j = 0; src[i] != '\0'; ++i) {
+		if (src[i] == '-') {
+			++i;
+			if ((isalpha(headc) && isalpha(src[i])) || (isdigit(headc) && isdigit(src[i]))) {
+				/* expand */
+				if (headc > src[i]) 
+					for (k = headc - 1; k >= src[i]; --k)
+						dst[j++] = k;
+				else
+					for (k = headc + 1; k <= src[i]; ++k)
+						dst[j++] = k;		
+				headc = '\0';
+			}
+			else if (src[i] == '\0') {
+				dst[j++] = '-';
+				dst[j] = '\0';
+				return;
+			}
+			else {
+				dst[j++] = '-';
+				dst[j++] = headc = src[i];
+			}
+		}
+		else 
+			dst[j++] = headc = src[i];	
+	}
+	dst[j] = '\0';
+}
+
+/*
+file name: tlookup.c
+log:
+	2016-01-04
+*/
+
+
+/*
+file name: wl.c
+log:
+	2016-01-13 *
+*/
+
+#include <stdio.h>
+#include "/home/liyang/include/text.h"
+#include "/home/liyang/include/strings.h"
+
+#define MAXLEN 10 
+#define BUFSIZE 100
+
+int histogram[MAXLEN]; 
+
+main() {
+	int i, len, total;
+	char word[BUFSIZE];
+
+	for (i = 0; i < MAXLEN; i++)
+		histogram[i] = 0;
+
+	total = 0;
+	while (getstring(word, BUFSIZE) != EOF)  	
+		if ((len = strleng(word)) > 0) {
+			total++;
+			if (len < MAXLEN) 
+				histogram[len-1]++;
+			else
+				histogram[MAXLEN-1]++;
+		}	
+
+	printf("word has\n");
+	for (i = 0; i < MAXLEN-1; i++)
+		printf("%d chars: %d\n", i+1, histogram[i]);
+	printf("more than %d chars: %d\n", MAXLEN-1, histogram[MAXLEN-1]);
+	printf("total: %d\n", total);
+}
+/*************************************************************
+* TITLE: word_count.c
+*
+* FUNCTION: counts lines, characters, words from standard input
+* 
+* CHANGE LOG:
+*	2015-4-14 copied form THE C PROGRAMMING LANGUAGE
+**************************************************************/
+
+#include <stdio.h>
+
+#define IN  1
+#define OUT 0
+
+main() {
+	int c, state;
+	double nl, nc, nw;
+
+	state = OUT;
+	nl = nc = nw = 0;
+	while ((c = getchar()) != EOF) {
+		if (c == '\n')
+			++nl;
+		if (c == ' ' || c == '\t' || c == '\n')
+			state = OUT;
+		else if (state == OUT) {
+			++nw;
+			state = IN;
+		} 
+		if (state == IN)
+			++nc;	
+	}
+	printf("lines: %.0f, words: %.0f, characters: %.0f\n", nl, nw, nc);
+}
+/*
+file name: wsc.c - count blanks, tabs, newlines
+log:
+	2016-01-11 create
+*/
+
+#include <stdio.h>
+#include "/home/liyang/include/text.h"
+
+main() {
+	int c, nbl, ntb, nnl;
+
+	nbl = ntb = nnl = 0;
+	for (c = getcha(); c != EOF; c = getcha())
+		if (c == ' ')
+			nbl++;
+		else if (c == '\t')
+			ntb++;
+		else if (c == '\n')
+			nnl++;
+	printf("blanks: %d tabs: %d newlines: %d\n", nbl, ntb, nnl);
+}
