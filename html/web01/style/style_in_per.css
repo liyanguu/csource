@@ -1,0 +1,29 @@
+/* style_in_per.css - stylesheet for index01.html */
+
+body {
+	font-family: 'arial', 'sans-serif';
+	font-size: 100%;
+	padding: 1%;
+}
+
+h1, h2 {
+	font-family: 'times new roman', 'serif';
+	margin: 0;
+	margin-top: 100%;
+	margin-bottom: 120%;
+}
+
+p {
+	text-indent: 28pt;
+	width: 600pt;	
+	margin: 0;
+	margin-top: 14pt;
+	margin-bottom: 16pt;
+}
+
+img {
+	width: 200pt;
+	height: auto;
+	margin-right: 14pt;
+	float: left;
+}

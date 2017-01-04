@@ -1,0 +1,7 @@
+for i in $*
+do
+	echo -n $i?
+	if getch == y
+		echo $i
+	fi
+done 

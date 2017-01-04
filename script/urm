@@ -1,0 +1,14 @@
+# NAME: unrm
+# SYNOPSIS: undoable rm, move file to another place
+# OUTLINE:
+#	specify directory of another place
+#	mv the file to another place
+
+
+# !bin/sh
+
+dst=~/another_place;
+filename=$1;
+
+mv $filename $dst;
+

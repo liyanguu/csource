@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>take it easy</title>
+
+<link rel="icon" type="img/jpg" href="img/box.jpg" />
+
+<style type="text/css">
+audio, video, canvas {
+	width: 320px;
+	height: 240px;
+	border: 1px solid #aaaa00;
+	margin: 1px;
+}
+</style>
+</head>
+
+<body>
+<video autoplay="autoplay" loop="loop" type="video/mp4">
+<source src="vi/sample.mp4" />
+your browser doesn't support the video tag.
+</video>
+
+<canvas id="can">
+your browser doesn't support the canvas element.
+</canvas> 
+
+<canvas id="dan">
+</canvas>
+
+<script type="text/javascript">
+
+var speed = 80;
+
+rollleft("can", "举头望明月,低头思故乡", 200, can.width, can.height / 2, speed, 24);
+
+// for test
+rollleft("dan", "举头望明月,低头思故乡", 200, dan.width, dan.height /2, speed, 48);
+
+function rollleft(id, txt, txtw, x, y, speed, frate) {
+	var c, cxt, w, h;
+	var step = speed / frate; 
+
+	c = document.getElementById(id);
+	cxt = c.getContext("2d");
+
+	w = c.width;
+	h= c.height;
+	cxt.clearRect(0, 0, w, h); 
+	cxt.font = "18px sans-serif";
+	cxt.strokeText(txt, x, y);
+	
+	if ((x -= step) <= -txtw)
+		x = w;
+	setTimeout(function() { rollleft(id, txt, txtw, x, y, speed, frate); }, 1000 / frate);
+}
+
+</script>
+</body>
+</html>

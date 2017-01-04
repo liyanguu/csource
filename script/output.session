@@ -1,0 +1,16 @@
+脚本启动于 2016年12月14日 星期三 18时44分17秒
+$ ls
+1   album.sh  clear.sh	      ftype.sh	      password.sh  timing.log
+8   args.txt  compressed.txt  log.txt	      printf.sh    typescript
+a1  cal.sh    debug.sh	      output.session  rename.sh    urm
+a2  cecho.sh  dmg2iso.pl      output.txt      rmnt	   users.sh
+a3  chex      files.sh	      out.txt	      timetake.sh  view.sh
+$ cat   echo 'this is an exam'
+this is an exam
+$ scriptplay timing.o log output.session
+sh: 3: scriptplay: not found
+$ scriptreplay timing.log output.seee  ssion
+scriptreplay: output.session 上的文件结尾异常
+$ exit
+
+脚本完成，于 2016年12月14日 星期三 18时45分27秒
